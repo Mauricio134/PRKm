@@ -1,7 +1,5 @@
-#include <iostream>
+#include "librerias.h"
 #include "prquadtree.h"
-
-using namespace std;
 
 // Constructor de Clase Data sin argumentos.
 Data::Data(){

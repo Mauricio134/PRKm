@@ -1,9 +1,5 @@
 #pragma once
-
-#include <iostream>
-#include <vector>
-
-using namespace std;
+#include "librerias.h"
 
 #define cantidad 500
 

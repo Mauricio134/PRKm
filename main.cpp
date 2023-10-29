@@ -1,20 +1,17 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <fstream>
+#include "librerias.h"
 #include "prquadtree.cpp"
 #include "kmean.cpp"
+#include "codo.cpp"
+#include "silueta.cpp"
 
 #define NOMBRE_ARCHIVO "points.csv"
-
-using namespace std;
 
 int main(){
     ifstream archivo(NOMBRE_ARCHIVO);
     string linea;
     char delimitador = ' ';
     vector<Data> datos;
+    vector<vector<float>> puntos;
     float Mx = -1e6;
     float My = -1e6;
     float mx = 1e6;
@@ -46,6 +43,7 @@ int main(){
             c++;
         }
         nueva.dato = d;
+        puntos.push_back(d);
         datos.push_back(nueva);
     }
     float al = max(Mx-mx, My-my);
@@ -53,6 +51,9 @@ int main(){
     for(int i = 0; i < datos.size(); i++){
         tree.Insert(Data(datos[i].longitud, datos[i].latitud, datos[i].dato));
     }
+
+    int k = silueta(puntos);
+    cout << k << endl;
     archivo.close();
     return 0;
 }
