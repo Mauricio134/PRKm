@@ -1,7 +1,6 @@
 #include "librerias.h"
 #include "prquadtree.cpp"
 #include "kmean.cpp"
-#include "codo.cpp"
 #include "silueta2.cpp"
 
 #define NOMBRE_ARCHIVO "points.csv"
@@ -47,12 +46,13 @@ int main(){
         datos.push_back(nueva);
     }
     float al = max(Mx-mx, My-my);
+    int k = silueta(puntos);
+    KmeanTree treek(k);
+    treek.Insert(puntos);
     Quadtree tree(Point(mx,my), al);
     for(int i = 0; i < datos.size(); i++){
         tree.Insert(Data(datos[i].longitud, datos[i].latitud, datos[i].dato));
     }
-
-    silueta2(puntos);
     archivo.close();
     return 0;
 }

@@ -1,34 +1,5 @@
 #include "librerias.h"
-
-vector<vector<float>> centroide(vector<vector<float>> datos){
-    vector<vector<float>> result(maxClusters);
-    for(int i = 0; i < maxClusters; i++){
-        result[i] = datos[rand() % datos.size()];
-    }
-    return result;
-}
-
-float distanciaEuclidiana(vector<float> centro, vector<float> dato){
-    int suma = 0;
-    for(int i = 0; i < dato.size(); i++){
-        suma += pow((centro[i] - dato[i]),2);
-    }
-    return (float) sqrt(suma);
-}
-
-vector<float> nuevoCentroide(vector<vector<float>> conjunto){
-    vector<float> nuevoCentro;
-    int filas = conjunto.size();
-    int columnas = conjunto[0].size();
-    for(int i = 0; i < columnas; i++){
-        float suma_indice = 0;
-        for(int j = 0; j < filas; j++){
-            suma_indice += conjunto[j][i];
-        }
-        nuevoCentro.push_back(suma_indice/filas);
-    }
-    return nuevoCentro;
-}
+#include "funciones.cpp"
 
 float hallarA(vector<float> p, vector<vector<float>> cluster){
     float aProm = 0;
@@ -86,8 +57,7 @@ float hallarSC(vector<vector<float>> Cluster,vector<vector<float>> Centroides, v
     return (float)scPromedio;
 }
 
-void silueta2(vector<vector<float>> datos){
-    freopen("output.txt", "w", stdout);
+int silueta(vector<vector<float>> datos){
     //Vectores a usar
     vector<vector<float>> centroides = centroide(datos);
     vector<vector<vector<float>>> Conjunto(maxClusters);
@@ -112,7 +82,13 @@ void silueta2(vector<vector<float>> datos){
     for(int i = 0; i < maxClusters; i++){
         SC[i] = hallarSC(Conjunto[i],centroides, Conjunto, centroides[i]);
     }
+    float masCerca = 1e9;
+    int indice = 0;
     for(int i = 0; i < maxClusters; i++){
-        cout << i+1 << " " << SC[i] << endl;
+        if(abs(1-SC[i]) < masCerca){
+            masCerca = abs(1-SC[i]);
+            indice = i+1;
+        }
     }
+    return indice;
 }

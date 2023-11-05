@@ -4,9 +4,9 @@
 #include <sstream>
 #include <fstream>
 #include <utility>
-#include <valarray>
 
 using namespace std;
 
+#define dimension 13
 #define cantidad 500
 #define maxClusters 10
