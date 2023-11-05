@@ -7,3 +7,6 @@
 #include <valarray>
 
 using namespace std;
+
+#define cantidad 500
+#define maxClusters 10

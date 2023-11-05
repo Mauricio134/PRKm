@@ -2,7 +2,7 @@
 #include "prquadtree.cpp"
 #include "kmean.cpp"
 #include "codo.cpp"
-#include "silueta.cpp"
+#include "silueta2.cpp"
 
 #define NOMBRE_ARCHIVO "points.csv"
 
@@ -52,8 +52,7 @@ int main(){
         tree.Insert(Data(datos[i].longitud, datos[i].latitud, datos[i].dato));
     }
 
-    int k = silueta(puntos);
-    cout << k << endl;
+    silueta2(puntos);
     archivo.close();
     return 0;
 }

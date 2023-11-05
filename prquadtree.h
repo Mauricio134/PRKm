@@ -1,8 +1,6 @@
 #pragma once
 #include "librerias.h"
 
-#define cantidad 500
-
 class Point{
 public:
     float x;
