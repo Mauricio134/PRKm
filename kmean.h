@@ -1,3 +1,4 @@
+#pragma once
 #include "librerias.h"
 
 class KmeanTree;
