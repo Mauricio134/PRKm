@@ -2,7 +2,6 @@
 #include "kmean.h"
 #include "silueta2.cpp"
 
-int amount = 0;
 
 float distanciaEu(vector<float> centro, vector<float> dato){
     int suma = 0;
@@ -31,18 +30,18 @@ Cluster::Cluster(){
 }
 
 KmeanTree::KmeanTree(){
-    clusters.resize(amount);
+    clusters.resize(divisiones);
 }
 
 KmeanTree::KmeanTree(int k){
     clusters.resize(k);
-    amount = k;
-    for(int i = 0; i < amount; i++) clusters[i] = new Cluster();
+    divisiones = k;
+    for(int i = 0; i < k; i++) clusters[i] = new Cluster();
 }
 
 void KmeanTree::Insert(const vector<vector<float>> & datos){
     //seleccionar Centroides
-    for(int i = 0; i < amount; i++){
+    for(int i = 0; i < divisiones; i++){
         clusters[i]->valor = datos[rand() % datos.size()];
     }
 
@@ -60,11 +59,12 @@ void KmeanTree::Insert(const vector<vector<float>> & datos){
         clusters[indice]->valor = nuevoCen(clusters[indice]->Set);
     }
 
-    for(int i = 0; i < amount; i++){
-        clusters[i]->next = new KmeanTree(amount);
-        if(clusters[i]->Set.size() == 1 || clusters[i]->Set.size() == 0){
+    for(int i = 0; i < divisiones; i++){
+        int nuevoK = silueta(clusters[i]->Set);
+        if(nuevoK == 1){
             return;
         }
+        clusters[i]->next = new KmeanTree(nuevoK);
         clusters[i]->next->Insert(clusters[i]->Set);
     }
 }
