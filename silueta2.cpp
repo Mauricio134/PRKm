@@ -1,3 +1,4 @@
+#pragma once
 #include "librerias.h"
 
 vector<vector<float>> centroide(vector<vector<float>> datos){

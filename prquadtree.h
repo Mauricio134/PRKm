@@ -23,6 +23,7 @@ private:
     Point bottomLeft;
     float height;
     int nPoints;
+    vector<Data> conjunto;
     Data * d;
     Quadtree * children[4];
 public:
