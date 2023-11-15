@@ -37,7 +37,7 @@ bool Quadtree::Outside(const Data & p){
 void Quadtree::Insert(const Data & p){
     if(Outside(p)) return;
 
-    if(nPoints == 0 && d == nullptr){
+    if(nPoints == 0){
         float altura = height/2.0;
         for(int i = 0; i < 4; i++){
             float childx = (i & 1) ? bottomLeft.x + altura : bottomLeft.x;
@@ -45,9 +45,11 @@ void Quadtree::Insert(const Data & p){
             children[i] = new Quadtree(Point(childx,childy),altura);
         }
         d = new Data(p.longitud, p.latitud, p.dato);
+        nPoints++;
+        conjunto.push_back(p);
         return;
     }
-    else if(nPoints == 0 && d != nullptr){
+    else if(d != nullptr){
         Data n_d = Data( d->longitud , d->latitud , d->dato );
         d = nullptr;
         float altura = height/2.0;
@@ -62,4 +64,5 @@ void Quadtree::Insert(const Data & p){
     if(p.latitud >= bottomLeft.y + altura) child |= 2;
     children[child]->Insert(p);
     nPoints++;
+    conjunto.push_back(p);
 }
