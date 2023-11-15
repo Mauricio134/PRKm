@@ -46,6 +46,7 @@ void Quadtree::Insert(const Data & p){
         }
         d = new Data(p.longitud, p.latitud, p.dato);
         nPoints++;
+        conjunto.push_back(p);
         return;
     }
     else if(d != nullptr){
@@ -63,4 +64,5 @@ void Quadtree::Insert(const Data & p){
     if(p.latitud >= bottomLeft.y + altura) child |= 2;
     children[child]->Insert(p);
     nPoints++;
+    conjunto.push_back(p);
 }
