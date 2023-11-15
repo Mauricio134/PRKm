@@ -14,6 +14,7 @@ public:
 
 class KmeanTree{
 public:
+    int divisiones;
     vector<Cluster *> clusters;
     KmeanTree();
     KmeanTree(int );

@@ -25,6 +25,7 @@ private:
     int nPoints;
     vector<Data> conjunto;
     Data * d;
+    vector<Data> conjunto;
     Quadtree * children[4];
 public:
     Quadtree();
