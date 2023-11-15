@@ -65,7 +65,7 @@ void KmeanTree::Insert(const vector<vector<float>> & datos){
         if(nuevoK == 1){
             return;
         }
-        clusters[i]->next = new KmeanTree(amount);
+        clusters[i]->next = new KmeanTree(nuevoK);
         clusters[i]->next->Insert(clusters[i]->Set);
     }
 }
