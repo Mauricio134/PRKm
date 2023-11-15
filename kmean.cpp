@@ -61,10 +61,11 @@ void KmeanTree::Insert(const vector<vector<float>> & datos){
     }
 
     for(int i = 0; i < amount; i++){
-        clusters[i]->next = new KmeanTree(amount);
-        if(clusters[i]->Set.size() == 1 || clusters[i]->Set.size() == 0){
+        int nuevoK = silueta(clusters[i]->Set);
+        if(nuevoK == 1){
             return;
         }
+        clusters[i]->next = new KmeanTree(amount);
         clusters[i]->next->Insert(clusters[i]->Set);
     }
 }
