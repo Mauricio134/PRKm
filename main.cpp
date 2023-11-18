@@ -50,7 +50,8 @@ int main(){
     //int k = silueta(puntos);
     //KmeanTree treek(k);
     //treek.Insert(puntos);
-    Quadtree tree(Point(mx,my), al);
+    int inicio = 0;
+    Quadtree tree(Point(mx,my), al, inicio);
     for(int i = 0; i < datos.size(); i++){
         tree.Insert(Data(datos[i].longitud, datos[i].latitud, datos[i].dato));
     }
