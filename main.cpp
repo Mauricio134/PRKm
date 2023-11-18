@@ -48,7 +48,7 @@ int main(){
         contador++;
     }
     float al = max(Mx-mx, My-my);
-    int k = silueta(puntos);
+    //int k = silueta(puntos);
     /*KmeanTree treek(k);
     treek.Insert(puntos);*/
     int inicio = 0;
