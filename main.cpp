@@ -3,7 +3,11 @@
 #include "kmean.cpp"
 #include "silueta2.cpp"
 
+<<<<<<< HEAD
 #define NOMBRE_ARCHIVO "meteorite.csv"
+=======
+#define NOMBRE_ARCHIVO "metorite.csv"
+>>>>>>> p3
 
 int main(){
     ifstream archivo(NOMBRE_ARCHIVO);
@@ -23,6 +27,7 @@ int main(){
         vector<float> d;
         int c = 0;
         Data nueva;
+<<<<<<< HEAD
         while(getline(strstr,number,','))
         {
             float n;
@@ -49,10 +54,11 @@ int main(){
     }
     float al = max(Mx-mx, My-my);
     //int k = silueta(puntos);
-    /*KmeanTree treek(k);
-    treek.Insert(puntos);*/
-    int inicio = 0;
-    Quadtree tree(Point(mx,my), al, inicio);
+=======
+    //KmeanTree treek(k);
+    //treek.Insert(puntos);
+    Quadtree tree(Point(mx,my), al);
+>>>>>>> p3
     for(int i = 0; i < datos.size(); i++){
         tree.Insert(Data(datos[i].longitud, datos[i].latitud, datos[i].dato));
     }
