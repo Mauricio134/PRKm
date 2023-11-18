@@ -3,12 +3,12 @@
 #include "kmean.cpp"
 #include "silueta2.cpp"
 
-#define NOMBRE_ARCHIVO "points.csv"
+#define NOMBRE_ARCHIVO "metorite.csv"
 
 int main(){
     ifstream archivo(NOMBRE_ARCHIVO);
     string linea;
-    char delimitador = ' ';
+    char delimitador = ',';
     vector<Data> datos;
     vector<vector<float>> puntos;
     float Mx = -1e6;
@@ -22,7 +22,7 @@ int main(){
         vector<float> d;
         int c = 0;
         Data nueva;
-        while(getline(strstr,number,' '))
+        while(getline(strstr,number,delimitador))
         {
             float n;
             istringstream(number) >> n;
@@ -46,9 +46,9 @@ int main(){
         datos.push_back(nueva);
     }
     float al = max(Mx-mx, My-my);
-    int k = silueta(puntos);
-    KmeanTree treek(k);
-    treek.Insert(puntos);
+    //int k = silueta(puntos);
+    //KmeanTree treek(k);
+    //treek.Insert(puntos);
     Quadtree tree(Point(mx,my), al);
     for(int i = 0; i < datos.size(); i++){
         tree.Insert(Data(datos[i].longitud, datos[i].latitud, datos[i].dato));
