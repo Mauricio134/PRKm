@@ -8,6 +8,7 @@
 
 using namespace std;
 
-#define dimension 13
-#define cantidad 500
+#define dimension 32
+
+#define cantidad 600
 #define maxClusters 10

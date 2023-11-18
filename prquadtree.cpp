@@ -5,7 +5,7 @@
 Data::Data(){
     latitud = 0.00;
     longitud = 0.00;
-    dato.resize(cantidad-2);
+    dato.resize(dimension-2);
 }
 
 // Constructor de Clase Data con argumentos.
@@ -22,9 +22,11 @@ Quadtree::Quadtree(){
 }
 
 //Constructir del Quadtree con argumentos.
-Quadtree::Quadtree( const Point &nuevo , float &h){
+Quadtree::Quadtree( const Point &nuevo , float &h, int n){
     bottomLeft = nuevo;
     height = h;
+    nivel = n;
+    nPoints = 0;
     for(int i = 0; i < 4; i++) children[i] = new Quadtree();
 }
 
@@ -35,6 +37,7 @@ bool Quadtree::Outside(const Data & p){
 
 // Funcion Insert
 void Quadtree::Insert(const Data & p){
+
     if(Outside(p)) return;
 
     if(nPoints == 0){
@@ -42,7 +45,7 @@ void Quadtree::Insert(const Data & p){
         for(int i = 0; i < 4; i++){
             float childx = (i & 1) ? bottomLeft.x + altura : bottomLeft.x;
             float childy = (i & 2) ? bottomLeft.y + altura : bottomLeft.y;
-            children[i] = new Quadtree(Point(childx,childy),altura);
+            children[i] = new Quadtree(Point(childx,childy),altura, nivel + 1);
         }
         d = new Data(p.longitud, p.latitud, p.dato);
         nPoints++;
@@ -50,6 +53,12 @@ void Quadtree::Insert(const Data & p){
         return;
     }
     else if(d != nullptr){
+        if(nivel >= mxAltura){
+            nPoints++;
+            conjunto.push_back(p);
+            return;
+        }
+        if(p.longitud == d->longitud && p.latitud == d->latitud) return;
         Data n_d = Data( d->longitud , d->latitud , d->dato );
         d = nullptr;
         float altura = height/2.0;
