@@ -1,6 +1,8 @@
 #pragma once
 #include "librerias.h"
 
+#define mxNivel 3
+
 class Point{
 public:
     float x;
@@ -23,12 +25,13 @@ private:
     Point bottomLeft;
     float height;
     int nPoints;
+    int nivel;
     vector<Data> conjunto;
     Data * d;
     Quadtree * children[4];
 public:
     Quadtree();
-    Quadtree(const Point &, float &);
+    Quadtree(const Point &, float &, int &);
     void Insert(const Data &);
     bool Outside(const Data &);
 };
