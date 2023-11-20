@@ -1,24 +1,6 @@
 #pragma once
 #include "librerias.h"
-
-#define mxAltura 3
-
-class Point{
-public:
-    float x;
-    float y;
-    Point() : x(0.00), y(0.00){};
-    Point(float x_, float y_) : x(x_), y(y_){};
-};
-
-class Data{
-public:
-    float longitud;
-    float latitud;
-    vector<float> dato;
-    Data();
-    Data(float, float, vector<float>);
-};
+#include "kmean.h"
 
 class Quadtree{
 private:
@@ -29,9 +11,11 @@ private:
     Data * d;
     vector<Data> conjunto;
     Quadtree * children[4];
+    KmeanTree * similitud;
 public:
     Quadtree();
     Quadtree(const Point &, float &, int );
     void Insert(const Data &);
     bool Outside(const Data &);
+    void Union(KmeanTree);
 };

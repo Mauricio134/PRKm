@@ -1,7 +1,9 @@
 #include "librerias.h"
+#include "prquadtree.h"
+#include "kmean.h"
+#include "silueta2.cpp"
 #include "prquadtree.cpp"
 #include "kmean.cpp"
-#include "silueta2.cpp"
 
 #define NOMBRE_ARCHIVO "meteorite.csv"
 
@@ -16,7 +18,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) && contador <= 10000)
+    while (getline(archivo, linea) && contador <= 500)
     {
         stringstream strstr(linea);
         string number;
@@ -44,19 +46,20 @@ int main(){
         }
         nueva.dato = d;
         puntos.push_back(d);
+        nueva.iterador = contador;
         datos.push_back(nueva);
         contador++;
     }
     float al = max(Mx-mx, My-my);
-    map<int,map<int,float>> matrixDistances;
-    //int k = silueta(puntos);
-    //KmeanTree treek(k);
-    //treek.Insert(puntos);
-    //Quadtree tree(Point(mx,my), al, 0);
-    /*for(int i = 0; i < datos.size(); i++){
+    int k = silueta(puntos);
+    KmeanTree treek(k,0);
+    treek.Insert(puntos);
+    Quadtree tree(Point(mx,my), al, 0);
+    for(int i = 0; i < datos.size(); i++){
         cout << "Insertado punto " <<  i << " : " << datos[i].longitud << " " << datos[i].latitud << endl;
         tree.Insert(Data(datos[i].longitud, datos[i].latitud, datos[i].dato));
-    }*/
+    }
+    tree.Union(treek);
     archivo.close();
     return 0;
 }

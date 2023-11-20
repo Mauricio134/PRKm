@@ -1,3 +1,4 @@
+#pragma once
 #include "librerias.h"
 
 class KmeanTree;
@@ -15,7 +16,9 @@ class KmeanTree{
 public:
     int divisiones;
     vector<Cluster *> clusters;
+    int altura = 0;
     KmeanTree();
-    KmeanTree(int );
+    KmeanTree(int , int);
     void Insert(const vector<vector<float>> &);
+    void clusterSelect(KmeanTree *, vector<Data> conjunto);
 };

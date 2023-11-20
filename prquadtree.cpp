@@ -1,19 +1,8 @@
+#pragma once
 #include "librerias.h"
 #include "prquadtree.h"
 
 // Constructor de Clase Data sin argumentos.
-Data::Data(){
-    latitud = 0.00;
-    longitud = 0.00;
-    dato.resize(dimension-2);
-}
-
-// Constructor de Clase Data con argumentos.
-Data::Data(float lon, float lat, vector<float> a){
-    latitud = lat;
-    longitud = lon;
-    dato = a;
-}
 
 // Constructor del Quadtree sin argumentos.
 Quadtree::Quadtree(){
@@ -54,6 +43,7 @@ void Quadtree::Insert(const Data & p){
     }
     else if(d != nullptr){
         if(nivel >= mxAltura){
+            d = new Data(p.longitud, p.latitud, p.dato);
             nPoints++;
             conjunto.push_back(p);
             return;
@@ -74,4 +64,19 @@ void Quadtree::Insert(const Data & p){
     children[child]->Insert(p);
     nPoints++;
     conjunto.push_back(p);
+}
+
+//Funcion Union
+void Quadtree::Union(KmeanTree mean){
+    for(int i = 0; i < 4; i++){
+        if(d != nullptr){
+            mean.clusterSelect(similitud, conjunto);
+            return;
+        }
+        else if(nPoints == 0){
+            return;
+        }
+        children[i]->Union(mean);
+    }
+    return;
 }

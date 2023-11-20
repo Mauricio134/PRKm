@@ -135,7 +135,6 @@ int silueta(vector<vector<float>> datos){
     //Hallar SC
     for(int i = 0; i < maxClusters; i++){
         SC[i] = hallarSC(Conjunto[i],centroides, Conjunto, centroides[i]);
-        cout << SC[i] << endl;
     }
     float masCerca = 1e9;
     int indice = 0;
