@@ -75,6 +75,7 @@
         "utility": "cpp",
         "format": "cpp",
         "stop_token": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "map": "cpp"
     }
 }

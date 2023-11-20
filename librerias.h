@@ -5,6 +5,9 @@
 #include <sstream>
 #include <fstream>
 #include <utility>
+#include <map>
+#include <algorithm>
+#include <iterator>
 
 using namespace std;
 
