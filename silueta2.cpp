@@ -66,16 +66,7 @@ float hallarA(vector<float> p, vector<vector<float>> cluster){
 
 float hallarB(vector<float> p, vector<vector<float>> centroides, vector<vector<vector<float>>> conjunto, vector<float> cluscentro){
     float indice = CentroidesCercanos[indiceVector(cluscentro)].first;
-    cout << indice << endl;
     float bProm = 0;
-    /*for(int i = 0; i < maxClusters; i++){
-        if(cluscentro == centroides[i]) continue;
-        float nuevaDistancia = distanciaEuclidiana(cluscentro, centroides[i]);
-        if(nuevaDistancia < distanciaMenor){
-            distanciaMenor = nuevaDistancia;
-            indice = i;
-        }
-    }*/
     for(int i = 0; i < conjunto[indice].size(); i++){
         if(p == conjunto[indice][i]){ continue; }
         bProm += distanciaEuclidiana(conjunto[indice][i], p);
@@ -129,7 +120,6 @@ int silueta(vector<vector<float>> datos){
         centroides[cluster] = nuevoCentroide(datos[i],cluster);
     }
     for(int i = 0; i < maxClusters; i++){
-        cout << i << endl;
         CentroidesCercanos[indiceVector(centroides[i])].first = -1;
         CentroidesCercanos[indiceVector(centroides[i])].second = 1e9;
         for(int j = 0; j < maxClusters; j++){

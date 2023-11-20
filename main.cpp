@@ -16,7 +16,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) && contador <= 4000)
+    while (getline(archivo, linea) && contador <= 10000)
     {
         stringstream strstr(linea);
         string number;
@@ -48,12 +48,12 @@ int main(){
         contador++;
     }
     float al = max(Mx-mx, My-my);
-    //vector<vector<float>> matriz(datos.size()-1, vector<float>(datos.size()));
-    int k = silueta(puntos);
+    map<int,map<int,float>> matrixDistances;
+    //int k = silueta(puntos);
     //KmeanTree treek(k);
     //treek.Insert(puntos);
-    /*Quadtree tree(Point(mx,my), al, 0);
-    for(int i = 0; i < datos.size(); i++){
+    //Quadtree tree(Point(mx,my), al, 0);
+    /*for(int i = 0; i < datos.size(); i++){
         cout << "Insertado punto " <<  i << " : " << datos[i].longitud << " " << datos[i].latitud << endl;
         tree.Insert(Data(datos[i].longitud, datos[i].latitud, datos[i].dato));
     }*/
