@@ -20,5 +20,5 @@ public:
     KmeanTree();
     KmeanTree(int , int);
     void Insert(const vector<vector<float>> &);
-    void clusterSelect(KmeanTree *, vector<Data> conjunto);
+    void clusterSelect(KmeanTree * &, vector<Data> conjunto);
 };

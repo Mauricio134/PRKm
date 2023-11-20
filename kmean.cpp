@@ -70,38 +70,40 @@ void KmeanTree::Insert(const vector<vector<float>> & datos){
     }
 }
 
-void KmeanTree::clusterSelect(KmeanTree * simil, vector<Data> conjunto){
+void KmeanTree::clusterSelect(KmeanTree * &simil, vector<Data> conjunto){
     if(altura < mxAltura){
-        int total = conjunto.size();
-        float aumentar = 1/total;
         vector<pair<float, int>> porcentajes(clusters.size());
-        vector<float> diferencia(clusters.size(), -1/clusters.size());
-        for(int i = 0; i < conjunto.size(); i++){
-            float distActual = 1e9;
-            int indice = 0;
-            for(int j = 0; j < clusters.size(); j++){
-                float distNueva = distanciaEu(conjunto[i].dato, clusters[j]->valor);
-                if(distNueva < distActual){
-                    distActual = distNueva;
-                    indice = j;
+        if(divisiones < 2){
+            float aumentar = (float)1/(float)conjunto.size();
+            vector<float> diferencia(clusters.size(), (float)-1/(float)clusters.size());
+            for(int i = 0; i < conjunto.size(); i++){
+                float distActual = 1e9;
+                int indice = 0;
+                for(int j = 0; j < clusters.size(); j++){
+                    float distNueva = distanciaEu(conjunto[i].dato, clusters[j]->valor);
+                    if(distNueva < distActual){
+                        distActual = distNueva;
+                        indice = j;
+                    }
                 }
+                porcentajes[indice].first += aumentar;
+                porcentajes[indice].second = indice;
+                diferencia[indice] += aumentar;
             }
-            porcentajes[indice].first += aumentar;
-            porcentajes[indice].second = indice;
-            diferencia[indice] += aumentar;
-        }
-        float sumatoria = 0;
-        for(int i = 0; i < diferencia.size(); i++){
-            diferencia[i] *= diferencia[i];
-            sumatoria += diferencia[i];
-        }
-        float response = ( ( sqrt( sumatoria/clusters.size() ) )/( 1/clusters.size() ) )*100;
-        sort(porcentajes.begin(), porcentajes.end(), [](pair<float, int> p1, pair<float, int> p2){return p1.first < p2.first;});
-        if(response < 56){
-            simil = this;
-            return;
+            float sumatoria = 0;
+            for(int i = 0; i < diferencia.size(); i++){
+                diferencia[i] *= diferencia[i];
+                sumatoria += diferencia[i];
+            }
+            float response = ( ( sqrt( (float)sumatoria/(float)clusters.size() ) )/( (float)1/(float)clusters.size() ) )*(float)100;
+            sort(porcentajes.begin(), porcentajes.end(), [](pair<float, int> p1, pair<float, int> p2){return p1.first < p2.first;});
+            if(response < 56){
+                simil = this;
+                return;
+            }
         }
         clusters[porcentajes.begin()->second]->next->clusterSelect(simil,conjunto);
+        return;
     }
     simil = this;
     return;
