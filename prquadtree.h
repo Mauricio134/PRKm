@@ -9,13 +9,13 @@ private:
     int nPoints;
     int nivel;
     Data * d;
-    vector<Data> conjunto;
+    vector<Data *> conjunto;
     Quadtree * children[4];
     KmeanTree * similitud;
 public:
     Quadtree();
     Quadtree(const Point &, float &, int );
-    void Insert(const Data &);
-    bool Outside(const Data &);
+    void Insert(Data *);
+    bool Outside(Data *);
     void Union(KmeanTree);
 };

@@ -52,14 +52,14 @@ int main(){
     }
     float al = max(Mx-mx, My-my);
     int k = silueta(puntos);
-    KmeanTree treek(k,0);
-    treek.Insert(puntos);
-    Quadtree tree(Point(mx,my), al, 0);
+    //KmeanTree treek(k,0);
+    //treek.Insert(puntos);
+    /*Quadtree tree(Point(mx,my), al, 0);
     for(int i = 0; i < datos.size(); i++){
         cout << "Insertado punto " <<  i << " : " << datos[i].longitud << " " << datos[i].latitud << endl;
-        tree.Insert(Data(datos[i].longitud, datos[i].latitud, datos[i].dato));
-    }
-    tree.Union(treek);
+        tree.Insert(&datos[i]);
+    }*/
+    //tree.Union(treek);
     archivo.close();
     return 0;
 }

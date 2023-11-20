@@ -20,12 +20,12 @@ Quadtree::Quadtree( const Point &nuevo , float &h, int n){
 }
 
 // Funcion de Outside, para verificar si el punto no se sale del cuadrante.
-bool Quadtree::Outside(const Data & p){
-    return p.longitud < bottomLeft.x || p.longitud > bottomLeft.x + height || p.latitud < bottomLeft.y || p.latitud > bottomLeft.y + height;
+bool Quadtree::Outside(Data * p){
+    return p->longitud < bottomLeft.x || p->longitud > bottomLeft.x + height || p->latitud < bottomLeft.y || p->latitud > bottomLeft.y + height;
 }
 
 // Funcion Insert
-void Quadtree::Insert(const Data & p){
+void Quadtree::Insert(Data * p){
 
     if(Outside(p)) return;
 
@@ -36,38 +36,38 @@ void Quadtree::Insert(const Data & p){
             float childy = (i & 2) ? bottomLeft.y + altura : bottomLeft.y;
             children[i] = new Quadtree(Point(childx,childy),altura, nivel + 1);
         }
-        d = new Data(p.longitud, p.latitud, p.dato);
+        d = p;
         nPoints++;
         conjunto.push_back(p);
         return;
     }
     else if(d != nullptr){
         if(nivel >= mxAltura){
-            d = new Data(p.longitud, p.latitud, p.dato);
+            d = new Data(p->longitud, p->latitud, p->dato);
             nPoints++;
             conjunto.push_back(p);
             return;
         }
-        if(p.longitud == d->longitud && p.latitud == d->latitud) return;
-        Data n_d = Data( d->longitud , d->latitud , d->dato );
+        if(p->longitud == d->longitud && p->latitud == d->latitud) return;
+        Data * n_d = d;
         d = nullptr;
         float altura = height/2.0;
         int child = 0;
-        if(n_d.longitud >= bottomLeft.x + altura) child |= 1;
-        if(n_d.latitud >= bottomLeft.y + altura) child |= 2;
+        if(n_d->longitud >= bottomLeft.x + altura) child |= 1;
+        if(n_d->latitud >= bottomLeft.y + altura) child |= 2;
         children[child]->Insert(n_d);
     }
     float altura = height/2.0;
     int child = 0;
-    if(p.longitud >= bottomLeft.x + altura) child |= 1;
-    if(p.latitud >= bottomLeft.y + altura) child |= 2;
+    if(p->longitud >= bottomLeft.x + altura) child |= 1;
+    if(p->latitud >= bottomLeft.y + altura) child |= 2;
     children[child]->Insert(p);
     nPoints++;
     conjunto.push_back(p);
 }
 
 //Funcion Union
-void Quadtree::Union(KmeanTree mean){
+/*void Quadtree::Union(KmeanTree mean){
     for(int i = 0; i < 4; i++){
         if(d != nullptr){
             mean.clusterSelect(similitud, conjunto);
@@ -79,4 +79,4 @@ void Quadtree::Union(KmeanTree mean){
         children[i]->Union(mean);
     }
     return;
-}
+}*/
