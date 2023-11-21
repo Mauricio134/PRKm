@@ -48,7 +48,6 @@ void Quadtree::Insert(Data * p){
             conjunto.push_back(p);
             return;
         }
-        if(p->longitud == d->longitud && p->latitud == d->latitud) return;
         Data * n_d = d;
         d = nullptr;
         float altura = height/2.0;

@@ -18,7 +18,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) && contador <= 600)
+    while (getline(archivo, linea) /*&& contador <= 600*/)
     {
         stringstream strstr(linea);
         string number;
@@ -50,8 +50,8 @@ int main(){
         contador++;
     }
     float al = max(Mx-mx, My-my);
-    int k = silueta(datos);
-    cout << k << endl;
+    //int k = silueta(datos);
+    //cout << k << endl;
     //KmeanTree treek(k,0);
     //treek.Insert(puntos);
     /*Quadtree tree(Point(mx,my), al, 0);

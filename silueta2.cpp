@@ -28,7 +28,7 @@ float distanciaEuclidiana(Data * d1, Data * d2){
     return DISTANCES[d1][d2];
 }
 
-vector<Data *> centroide(vector<Data> datos){
+vector<Data *> centroide(vector<Data> &datos){
     srand(time(NULL));
     vector<Data *> result(maxClusters);
     for(int i = 0; i < maxClusters; i++){
