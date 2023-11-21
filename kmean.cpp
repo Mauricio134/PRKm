@@ -1,4 +1,4 @@
-#include "librerias.h"
+/*#include "librerias.h"
 #include "kmean.h"
 #include "silueta2.cpp"
 
@@ -107,4 +107,4 @@ void KmeanTree::clusterSelect(KmeanTree * &simil, vector<Data> conjunto){
     }
     simil = this;
     return;
-}
+}*/

@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-map<int, pair<vector<float>,int>> nuevocentroide;
-map<string, map<string, float>> DISTANCES;
-map<string, pair<int, float>> CentroidesCercanos;
+map<int, pair<Data *,int>> nuevocentroide;
+map<Data *, map<Data *, float>> DISTANCES;
+map<Data *, pair<int, float>> CentroidesCercanos;
 
 string indiceVector(const vector<float>& indice) {
     string result;
@@ -13,37 +13,37 @@ string indiceVector(const vector<float>& indice) {
     return result;
 }
 
-float distanciaEuclidiana(vector<float> centro, vector<float> dato){
-    if (DISTANCES[indiceVector(centro)][indiceVector(dato)] == 0) {
-        if(DISTANCES[indiceVector(dato)][indiceVector(centro)] == 0){
+float distanciaEuclidiana(Data * d1, Data * d2){
+    if (DISTANCES[d1][d2] == 0) {
+        if(DISTANCES[d2][d1] == 0){
             int suma = 0;
-            for(int i = 0; i < dato.size(); i++){
-                suma += pow((centro[i] - dato[i]),2);
+            for(int i = 0; i < d1->dato.size(); i++){
+                suma += pow((d1->dato[i] - d2->dato[i]),2);
             }
-            DISTANCES[indiceVector(centro)][indiceVector(dato)] = (float) sqrt(suma);
+            DISTANCES[d1][d2] = (float) sqrt(suma);
             return (float) sqrt(suma);
         }
-        return DISTANCES[indiceVector(dato)][indiceVector(centro)];
+        return DISTANCES[d2][d1];
     }
-    return DISTANCES[indiceVector(centro)][indiceVector(dato)];
+    return DISTANCES[d1][d2];
 }
 
-vector<vector<float>> centroide(vector<vector<float>> datos){
-    srand (time(NULL));
-    vector<vector<float>> result(maxClusters);
+vector<Data *> centroide(vector<Data> datos){
+    srand(time(NULL));
+    vector<Data *> result(maxClusters);
     for(int i = 0; i < maxClusters; i++){
-        result[i] = datos[rand() % datos.size()];
+        result[i] = &(datos[rand() % datos.size()]);
     }
     return result;
 }
 
-vector<float> nuevoCentroide(vector<float> p, int cluster){
+Data * nuevoCentroide(Data * p, int cluster){
     auto it = nuevocentroide.find(cluster);
     if (it != nuevocentroide.end()) {
-        for(int i = 0; i < p.size(); i++){
-            nuevocentroide[cluster].first[i] *= nuevocentroide[cluster].second;
-            nuevocentroide[cluster].first[i] += p[i];
-            nuevocentroide[cluster].first[i] /= nuevocentroide[cluster].second+1;
+        for(int i = 0; i < p->dato.size(); i++){
+            nuevocentroide[cluster].first->dato[i] *= nuevocentroide[cluster].second;
+            nuevocentroide[cluster].first->dato[i] += p->dato[i];
+            nuevocentroide[cluster].first->dato[i] /= nuevocentroide[cluster].second+1;
         }
         nuevocentroide[cluster].second++;
         return nuevocentroide[cluster].first;
@@ -52,7 +52,7 @@ vector<float> nuevoCentroide(vector<float> p, int cluster){
     return p;
 }
 
-float hallarA(vector<float> p, vector<vector<float>> cluster){
+float hallarA(Data * p, vector<Data *> cluster){
     float aProm = 0;
     for(int i = 0; i < cluster.size(); i++){
         if(p == cluster[i]) continue;
@@ -64,8 +64,8 @@ float hallarA(vector<float> p, vector<vector<float>> cluster){
     return (float)(aProm/(cluster.size()-1));
 }
 
-float hallarB(vector<float> p, vector<vector<float>> centroides, vector<vector<vector<float>>> conjunto, vector<float> cluscentro){
-    float indice = CentroidesCercanos[indiceVector(cluscentro)].first;
+float hallarB(Data * p, vector<Data *> centroides, vector<vector<Data *>> conjunto, Data * cluscentro){
+    float indice = CentroidesCercanos[cluscentro].first;
     float bProm = 0;
     for(int i = 0; i < conjunto[indice].size(); i++){
         if(p == conjunto[indice][i]){ continue; }
@@ -87,7 +87,7 @@ float SC(float a, float b){
     }
 }
 
-float hallarSC(vector<vector<float>> Cluster,vector<vector<float>> Centroides, vector<vector<vector<float>>> Conjunto, vector<float> clusCentro){
+float hallarSC(vector<Data *> Cluster,vector<Data *> Centroides, vector<vector<Data *>> Conjunto, Data * clusCentro){
     float scPromedio = 0;
     for(int i = 0; i < Cluster.size(); i++){
         float a = hallarA(Cluster[i], Cluster);
@@ -99,10 +99,10 @@ float hallarSC(vector<vector<float>> Cluster,vector<vector<float>> Centroides, v
     return (float)scPromedio;
 }
 
-int silueta(vector<vector<float>> datos){
+int silueta(vector<Data> datos){
     //Vectores a usar
-    vector<vector<float>> centroides = centroide(datos);
-    vector<vector<vector<float>>> Conjunto(maxClusters);
+    vector<Data *> centroides = centroide(datos);
+    vector<vector<Data *>> Conjunto(maxClusters);
     vector<float> SC(maxClusters);
 
     //Ubicar puntos en el cluster correcto
@@ -110,24 +110,24 @@ int silueta(vector<vector<float>> datos){
         float distancia_menor = 1e9;
         int cluster = 0;
         for(int j = 0; j < maxClusters; j++){
-            float nueva_distancia = distanciaEuclidiana(centroides[j], datos[i]);
+            float nueva_distancia = distanciaEuclidiana(centroides[j], &datos[i]);
             if(nueva_distancia < distancia_menor){
                 distancia_menor = nueva_distancia;
                 cluster = j;
             }
         }
-        Conjunto[cluster].push_back(datos[i]);
-        centroides[cluster] = nuevoCentroide(datos[i],cluster);
+        Conjunto[cluster].push_back(&datos[i]);
+        centroides[cluster] = nuevoCentroide(&datos[i],cluster);
     }
     for(int i = 0; i < maxClusters; i++){
-        CentroidesCercanos[indiceVector(centroides[i])].first = -1;
-        CentroidesCercanos[indiceVector(centroides[i])].second = 1e9;
+        CentroidesCercanos[centroides[i]].first = -1;
+        CentroidesCercanos[centroides[i]].second = 1e9;
         for(int j = 0; j < maxClusters; j++){
             if(centroides[i] == centroides[j]) continue;
             float nuevaDistancia = distanciaEuclidiana(centroides[i], centroides[j]);
-            if(nuevaDistancia < CentroidesCercanos[indiceVector(centroides[i])].second){
-                CentroidesCercanos[indiceVector(centroides[i])].first = j;
-                CentroidesCercanos[indiceVector(centroides[i])].second = nuevaDistancia;
+            if(nuevaDistancia < CentroidesCercanos[centroides[i]].second){
+                CentroidesCercanos[centroides[i]].first = j;
+                CentroidesCercanos[centroides[i]].second = nuevaDistancia;
             }
         }
     }
@@ -139,7 +139,7 @@ int silueta(vector<vector<float>> datos){
     float masCerca = 1e9;
     int indice = 0;
     for(int i = 0; i < maxClusters; i++){
-        if(abs(1-SC[i]) < masCerca){
+        if(abs(1-SC[i]) <= masCerca){
             masCerca = abs(1-SC[i]);
             indice = i+1;
         }
