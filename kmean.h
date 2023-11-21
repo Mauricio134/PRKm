@@ -6,8 +6,8 @@ class Cluster;
 
 class Cluster{
 public:
-    vector<vector<float>> Set;
-    vector<float> valor;
+    vector<Data *> Set;
+    Data * valor;
     KmeanTree * next;
     Cluster();
 };
@@ -19,6 +19,6 @@ public:
     int altura = 0;
     KmeanTree();
     KmeanTree(int , int);
-    void Insert(const vector<vector<float>> &);
+    void Insert(vector<Data *> &);
     void clusterSelect(KmeanTree * &, vector<Data> conjunto);
 };

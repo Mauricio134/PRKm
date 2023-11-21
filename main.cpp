@@ -11,17 +11,18 @@ int main(){
     ifstream archivo(NOMBRE_ARCHIVO);
     string linea;
     char delimitador = ',';
-    vector<Data> datos;
-    vector<vector<float>> puntos;
+    vector<Data *> datos;
     float Mx = -1e6;
     float My = -1e6;
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) /*&& contador <= 600*/)
+    while (getline(archivo, linea) && contador <= 500)
     {
         stringstream strstr(linea);
         string number;
+        float longitud = 0;
+        float latitud = 0;
         vector<float> d;
         int c = 0;
         Data nueva;
@@ -35,25 +36,23 @@ int main(){
             else if(c == 0){
                 mx = min(mx,n);
                 Mx = max(Mx,n);
-                nueva.longitud = n;
+                longitud = n;
             }
             else if(c == 1){
                 my = min(my,n);
                 My = max(My,n);
-                nueva.latitud = n;
+                latitud = n;
             }
             c++;
         }
-        nueva.dato = d;
-        nueva.iterador = contador;
-        datos.push_back(nueva);
+        datos.push_back(new Data(longitud, latitud, d));
         contador++;
     }
     float al = max(Mx-mx, My-my);
-    //int k = silueta(datos);
-    //cout << k << endl;
-    //KmeanTree treek(k,0);
-    //treek.Insert(puntos);
+    int k = silueta(datos);
+    cout << k << endl;
+    KmeanTree treek(k,0);
+    treek.Insert(datos);
     /*Quadtree tree(Point(mx,my), al, 0);
     for(int i = 0; i < datos.size(); i++){
         cout << "Insertado punto " <<  i << " : " << datos[i].longitud << " " << datos[i].latitud << endl;

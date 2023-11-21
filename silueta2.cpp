@@ -7,12 +7,6 @@ map<int, pair<Data *,int>> nuevocentroide;
 map<Data *, map<Data *, float>> DISTANCES;
 map<Data *, pair<int, float>> CentroidesCercanos;
 
-string indiceVector(const vector<float>& indice) {
-    string result;
-    transform(indice.begin(), indice.end(), back_inserter(result), [](float i) { return static_cast<char>(i); });
-    return result;
-}
-
 float distanciaEuclidiana(Data * d1, Data * d2){
     if (DISTANCES[d1][d2] == 0) {
         if(DISTANCES[d2][d1] == 0){
@@ -28,11 +22,11 @@ float distanciaEuclidiana(Data * d1, Data * d2){
     return DISTANCES[d1][d2];
 }
 
-vector<Data *> centroide(vector<Data> &datos){
+vector<Data *> centroide(vector<Data *> datos, int k){
     srand(time(NULL));
-    vector<Data *> result(maxClusters);
-    for(int i = 0; i < maxClusters; i++){
-        result[i] = &(datos[rand() % datos.size()]);
+    vector<Data *> result(k);
+    for(int i = 0; i < k; i++){
+        result[i] = datos[rand() % datos.size()];
     }
     return result;
 }
@@ -52,7 +46,7 @@ Data * nuevoCentroide(Data * p, int cluster){
     return p;
 }
 
-float hallarA(Data * p, vector<Data *> cluster){
+float hallarA(Data * p, vector<Data *> &cluster){
     float aProm = 0;
     for(int i = 0; i < cluster.size(); i++){
         if(p == cluster[i]) continue;
@@ -64,7 +58,7 @@ float hallarA(Data * p, vector<Data *> cluster){
     return (float)(aProm/(cluster.size()-1));
 }
 
-float hallarB(Data * p, vector<Data *> centroides, vector<vector<Data *>> conjunto, Data * cluscentro){
+float hallarB(Data * p, vector<Data *> & centroides, vector<vector<Data *>> & conjunto, Data * cluscentro){
     float indice = CentroidesCercanos[cluscentro].first;
     float bProm = 0;
     for(int i = 0; i < conjunto[indice].size(); i++){
@@ -87,7 +81,7 @@ float SC(float a, float b){
     }
 }
 
-float hallarSC(vector<Data *> Cluster,vector<Data *> Centroides, vector<vector<Data *>> Conjunto, Data * clusCentro){
+float hallarSC(vector<Data *> & Cluster,vector<Data *> & Centroides, vector<vector<Data *>> & Conjunto, Data * clusCentro){
     float scPromedio = 0;
     for(int i = 0; i < Cluster.size(); i++){
         float a = hallarA(Cluster[i], Cluster);
@@ -99,54 +93,58 @@ float hallarSC(vector<Data *> Cluster,vector<Data *> Centroides, vector<vector<D
     return (float)scPromedio;
 }
 
-int silueta(vector<Data> datos){
+int silueta(vector<Data *> & datos){
     //Vectores a usar
-    vector<Data *> centroides = centroide(datos);
-    vector<vector<Data *>> Conjunto(maxClusters);
-    vector<float> SC(maxClusters);
+    vector<float> silouthe;
+    for(int k = 2; k <= maxClusters; k++){
+        vector<Data *> centroides = centroide(datos,k);
+        vector<vector<Data *>> Conjunto(k);
 
-    //Ubicar puntos en el cluster correcto
-    for(int i = 0; i < datos.size(); i++){
-        float distancia_menor = 1e9;
-        int cluster = 0;
-        for(int j = 0; j < maxClusters; j++){
-            float nueva_distancia = distanciaEuclidiana(centroides[j], &datos[i]);
-            if(nueva_distancia < distancia_menor){
-                distancia_menor = nueva_distancia;
-                cluster = j;
+        //Ubicar puntos en el cluster correcto
+        for(int i = 0; i < datos.size(); i++){
+            float distancia_menor = 1e9;
+            int cluster = 0;
+            for(int j = 0; j < k; j++){
+                float nueva_distancia = distanciaEuclidiana(centroides[j], datos[i]);
+                if(nueva_distancia < distancia_menor){
+                    distancia_menor = nueva_distancia;
+                    cluster = j;
+                }
+            }
+            Conjunto[cluster].push_back(datos[i]);
+            centroides[cluster] = nuevoCentroide(datos[i],cluster);
+        }
+        for(int i = 0; i < k; i++){
+            CentroidesCercanos[centroides[i]].first = -1;
+            CentroidesCercanos[centroides[i]].second = 1e9;
+            for(int j = 0; j < k; j++){
+                if(centroides[i] == centroides[j]) continue;
+                float nuevaDistancia = distanciaEuclidiana(centroides[i], centroides[j]);
+                if(nuevaDistancia < CentroidesCercanos[centroides[i]].second){
+                    CentroidesCercanos[centroides[i]].first = j;
+                    CentroidesCercanos[centroides[i]].second = nuevaDistancia;
+                }
             }
         }
-        Conjunto[cluster].push_back(&datos[i]);
-        centroides[cluster] = nuevoCentroide(&datos[i],cluster);
-    }
-    for(int i = 0; i < maxClusters; i++){
-        CentroidesCercanos[centroides[i]].first = -1;
-        CentroidesCercanos[centroides[i]].second = 1e9;
-        for(int j = 0; j < maxClusters; j++){
-            if(centroides[i] == centroides[j]) continue;
-            float nuevaDistancia = distanciaEuclidiana(centroides[i], centroides[j]);
-            if(nuevaDistancia < CentroidesCercanos[centroides[i]].second){
-                CentroidesCercanos[centroides[i]].first = j;
-                CentroidesCercanos[centroides[i]].second = nuevaDistancia;
-            }
+
+        //Hallar SC
+        float SC = 0;
+        for(int i = 0; i < k; i++){
+            SC += hallarSC(Conjunto[i],centroides, Conjunto, centroides[i]);
         }
+        silouthe.push_back((float)SC/(float)k);
     }
 
-    //Hallar SC
-    for(int i = 0; i < maxClusters; i++){
-        SC[i] = hallarSC(Conjunto[i],centroides, Conjunto, centroides[i]);
-    }
     float masCerca = 1e9;
-    int indice = 0;
-    for(int i = 0; i < maxClusters; i++){
-        if(abs(1-SC[i]) <= masCerca){
-            masCerca = abs(1-SC[i]);
-            indice = i+1;
+    int indice = 2;
+    for(int i = 0; i < silouthe.size(); i++){
+        if(abs(1-silouthe[i]) < masCerca){
+            masCerca = abs(1-silouthe[i]);
+            indice = i+2;
         }
     }
-
-    for(int i = 0; i < SC.size(); i++){
-        cout << i + 1 << " " << SC[i] << endl;
+    for(int i = 0; i < silouthe.size(); i++){
+        cout << i + 2 << " " << silouthe[i] << endl;
     }
     return indice;
 }
