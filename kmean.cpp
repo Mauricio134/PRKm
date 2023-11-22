@@ -45,6 +45,24 @@ KmeanTree::KmeanTree(int k, int nuevah){
 
 void KmeanTree::Insert(vector<Data *> & datos){
     //seleccionar Centroides
+
+    for(int i = 0; i < divisiones; i++){
+        clusters[i]->valor = datos[rand() % datos.size()];
+    }
+
+    for(int i = 0; i < datos.size(); i++){
+        float distanciaMin = 1e9;
+        float indice = 0;
+        for(int j = 0; j < clusters.size(); j++){
+            float nuevaDist = distanciaEu(datos[i], clusters[j]->valor);
+            if(nuevaDist < distanciaMin){
+                distanciaMin = nuevaDist;
+                indice = j;
+            }
+        }
+        clusters[indice]->Set.push_back(datos[i]);
+        clusters[indice]->valor = nuevoCen(datos[i], indice);
+    }
     if(divisiones == 1){
         return;
     }
@@ -58,7 +76,7 @@ void KmeanTree::Insert(vector<Data *> & datos){
         }
         cout << "nuevo K" << endl;
         int nuevoK = silueta2(clusters[i]->Set);
-        cout << nuevoK << endl;
+        cout << nuevoK << " posicion: " << altura << " , " << i << endl;
         clusters[i]->next = new KmeanTree(nuevoK, altura+1);
         clusters[i]->next->Insert(clusters[i]->Set);
     }
