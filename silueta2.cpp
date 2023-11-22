@@ -70,14 +70,13 @@ float hallarB(Data * p, vector<Data *> & centroides, vector<vector<Data *>> & co
 }
 
 float SC(float a, float b){
-    if(a == b){
-        return (float) 0;
-    }
-    else if(a < b){
-        return (float) (1-a/b);
-    }
-    else{
-        return (float) (b/a - 1);
+    const float epsilon = 1e-6;
+    if (fabs(a - b) < epsilon) {
+        return 0.0f;
+    } else if (a < b) {
+        return 1.0f - a / b;
+    } else {
+        return b / a - 1.0f;
     }
 }
 
@@ -93,13 +92,24 @@ float hallarSC(vector<Data *> & Cluster,vector<Data *> & Centroides, vector<vect
     return (float)scPromedio;
 }
 
-int silueta(vector<Data *> & datos){
+pair<int, pair<vector<Data *>*, vector<vector<Data *>>*>> silueta2(vector<Data *> & datos){
     //Vectores a usar
-    vector<float> silouthe;
-    for(int k = 2; k <= maxClusters; k++){
-        vector<Data *> centroides = centroide(datos,k);
-        vector<vector<Data *>> Conjunto(k);
+    float masCerca = 1e9;
+    int indice = 1;
 
+    nuevocentroide.clear();
+    DISTANCES.clear();
+    CentroidesCercanos.clear();
+    pair<vector<Data *> *, vector<vector<Data *>> *> centroConjunto;
+    int totalClusters = maxClusters;
+    if(datos.size() < maxClusters){
+        totalClusters = datos.size();
+    }
+    for(int k = 1; k <= totalClusters; k++){
+        vector<Data *> centroides(k);
+        vector<vector<Data *>> Conjunto(k);
+        centroides = centroide(datos,k);
+        Conjunto.resize(k);
         //Ubicar puntos en el cluster correcto
         for(int i = 0; i < datos.size(); i++){
             float distancia_menor = 1e9;
@@ -115,7 +125,7 @@ int silueta(vector<Data *> & datos){
             centroides[cluster] = nuevoCentroide(datos[i],cluster);
         }
         for(int i = 0; i < k; i++){
-            CentroidesCercanos[centroides[i]].first = -1;
+            CentroidesCercanos[centroides[i]].first = 0;
             CentroidesCercanos[centroides[i]].second = 1e9;
             for(int j = 0; j < k; j++){
                 if(centroides[i] == centroides[j]) continue;
@@ -128,23 +138,21 @@ int silueta(vector<Data *> & datos){
         }
 
         //Hallar SC
-        float SC = 0;
+        float sc = 0;
         for(int i = 0; i < k; i++){
-            SC += hallarSC(Conjunto[i],centroides, Conjunto, centroides[i]);
+            if(Conjunto[i].size() == 0){
+                sc = -k;
+                break;
+            }
+            sc += hallarSC(Conjunto[i],centroides, Conjunto, centroides[i]);
         }
-        silouthe.push_back((float)SC/(float)k);
+        if(abs(1-(float)sc/(float)k) < masCerca){
+            centroConjunto = make_pair(new vector<Data *>(centroides), new vector<vector<Data *>> (Conjunto));
+            masCerca = abs(1-(float)sc/(float)k);
+            indice = k;
+        }
+        cout << k << ": " << (float)sc/(float)k << endl;
     }
 
-    float masCerca = 1e9;
-    int indice = 2;
-    for(int i = 0; i < silouthe.size(); i++){
-        if(abs(1-silouthe[i]) < masCerca){
-            masCerca = abs(1-silouthe[i]);
-            indice = i+2;
-        }
-    }
-    for(int i = 0; i < silouthe.size(); i++){
-        cout << i + 2 << " " << silouthe[i] << endl;
-    }
-    return indice;
+    return make_pair(indice, centroConjunto);
 }

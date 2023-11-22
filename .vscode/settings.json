@@ -77,6 +77,11 @@
         "stop_token": "cpp",
         "valarray": "cpp",
         "map": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "__tree": "cpp",
+        "deque": "cpp",
+        "queue": "cpp",
+        "stack": "cpp",
+        "cinttypes": "cpp"
     }
 }

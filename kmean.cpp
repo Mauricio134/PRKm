@@ -43,24 +43,17 @@ KmeanTree::KmeanTree(int k, int nuevah){
     for(int i = 0; i < k; i++) clusters[i] = new Cluster();
 }
 
-void KmeanTree::Insert(vector<Data *> & datos){
+void KmeanTree::Insert(vector<Data *> & datos, vector<Data *> * & centroides, vector<vector<Data *>> * & conjunto){
     //seleccionar Centroides
     for(int i = 0; i < divisiones; i++){
-        clusters[i]->valor = datos[rand() % datos.size()];
+        clusters[i]->valor = (*centroides)[i];
     }
 
-    for(int i = 0; i < datos.size(); i++){
-        float distanciaMin = 1e9;
-        float indice = 0;
-        for(int j = 0; j < clusters.size(); j++){
-            float nuevaDist = distanciaEu(datos[i], clusters[j]->valor);
-            if(nuevaDist < distanciaMin){
-                distanciaMin = nuevaDist;
-                indice = j;
-            }
-        }
-        clusters[indice]->Set.push_back(datos[i]);
-        clusters[indice]->valor = nuevoCen(datos[i], indice);
+    for(int i = 0; i < (*conjunto).size(); i++){
+        clusters[i]->Set = (*conjunto)[i];
+    }
+    if(divisiones == 1){
+        return;
     }
 
     for(int i = 0; i < divisiones; i++){
@@ -70,10 +63,11 @@ void KmeanTree::Insert(vector<Data *> & datos){
         else if(clusters[i]->Set.size() == 1){
             continue;
         }
-        int nuevoK = silueta(clusters[i]->Set);
-        cout << nuevoK << endl;
-        clusters[i]->next = new KmeanTree(nuevoK, altura+1);
-        clusters[i]->next->Insert(clusters[i]->Set);
+        cout << "nuevo K" << endl;
+        pair<int, pair<vector<Data *>*, vector<vector<Data *>>*>> nuevoK = silueta2(clusters[i]->Set);
+        cout << nuevoK.first << endl;
+        clusters[i]->next = new KmeanTree(nuevoK.first, altura+1);
+        clusters[i]->next->Insert(clusters[i]->Set, nuevoK.second.first, nuevoK.second.second);
     }
 }
 /*void KmeanTree::clusterSelect(KmeanTree * &simil, vector<Data> conjunto){
