@@ -50,16 +50,14 @@ int main(){
     }
     float al = max(Mx-mx, My-my);
     auto start = std::chrono::high_resolution_clock::now();
-    pair<int, pair<vector<Data *>*, vector<vector<Data *>>*>> k = silueta2(datos);
+    int k = silueta2(datos);
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
     std::cout << "Tiempo de ejecucion: " << duration.count() << " microsegundos." << std::endl;
-    cout << k.first << endl;
-    cout << k.second.first << endl;
-    cout << k.second.second << endl;
-    KmeanTree treek(k.first,0);
-    treek.Insert(datos, k.second.first, k.second.second);
+    cout << k << endl;
+    KmeanTree treek(k,0);
+    treek.Insert(datos);
     /*Quadtree tree(Point(mx,my), al, 0);
     for(int i = 0; i < datos.size(); i++){
         cout << "Insertado punto " <<  i << " : " << datos[i].longitud << " " << datos[i].latitud << endl;

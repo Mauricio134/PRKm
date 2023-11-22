@@ -43,15 +43,8 @@ KmeanTree::KmeanTree(int k, int nuevah){
     for(int i = 0; i < k; i++) clusters[i] = new Cluster();
 }
 
-void KmeanTree::Insert(vector<Data *> & datos, vector<Data *> * & centroides, vector<vector<Data *>> * & conjunto){
+void KmeanTree::Insert(vector<Data *> & datos){
     //seleccionar Centroides
-    for(int i = 0; i < divisiones; i++){
-        clusters[i]->valor = (*centroides)[i];
-    }
-
-    for(int i = 0; i < (*conjunto).size(); i++){
-        clusters[i]->Set = (*conjunto)[i];
-    }
     if(divisiones == 1){
         return;
     }
@@ -64,10 +57,10 @@ void KmeanTree::Insert(vector<Data *> & datos, vector<Data *> * & centroides, ve
             continue;
         }
         cout << "nuevo K" << endl;
-        pair<int, pair<vector<Data *>*, vector<vector<Data *>>*>> nuevoK = silueta2(clusters[i]->Set);
-        cout << nuevoK.first << endl;
-        clusters[i]->next = new KmeanTree(nuevoK.first, altura+1);
-        clusters[i]->next->Insert(clusters[i]->Set, nuevoK.second.first, nuevoK.second.second);
+        int nuevoK = silueta2(clusters[i]->Set);
+        cout << nuevoK << endl;
+        clusters[i]->next = new KmeanTree(nuevoK, altura+1);
+        clusters[i]->next->Insert(clusters[i]->Set);
     }
 }
 /*void KmeanTree::clusterSelect(KmeanTree * &simil, vector<Data> conjunto){

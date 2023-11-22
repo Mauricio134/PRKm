@@ -92,7 +92,7 @@ float hallarSC(vector<Data *> & Cluster,vector<Data *> & Centroides, vector<vect
     return (float)scPromedio;
 }
 
-pair<int, pair<vector<Data *>*, vector<vector<Data *>>*>> silueta2(vector<Data *> & datos){
+int silueta2(vector<Data *> & datos){
     //Vectores a usar
     float masCerca = 1e9;
     int indice = 1;
@@ -147,12 +147,11 @@ pair<int, pair<vector<Data *>*, vector<vector<Data *>>*>> silueta2(vector<Data *
             sc += hallarSC(Conjunto[i],centroides, Conjunto, centroides[i]);
         }
         if(abs(1-(float)sc/(float)k) < masCerca){
-            centroConjunto = make_pair(new vector<Data *>(centroides), new vector<vector<Data *>> (Conjunto));
             masCerca = abs(1-(float)sc/(float)k);
             indice = k;
         }
         cout << k << ": " << (float)sc/(float)k << endl;
     }
 
-    return make_pair(indice, centroConjunto);
+    return indice;
 }
