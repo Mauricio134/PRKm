@@ -24,9 +24,20 @@ float distanciaEuclidiana(Data * d1, Data * d2){
 
 vector<Data *> centroide(vector<Data *> datos, int k){
     srand(time(NULL));
-    vector<Data *> result(k);
-    for(int i = 0; i < k; i++){
-        result[i] = datos[rand() % datos.size()];
+    vector<Data *> result;
+    result.push_back(datos[rand() % datos.size()]);
+    for(int i = 0; i < k-1; i++){
+        vector<pair<float, int>> dist;
+        for(int j = 0; j < datos.size(); j++){
+            float d = 1e9;
+            for(int l = 0; l < result.size(); l++){
+                d = min(d, distanciaEuclidiana(datos[j], result[l]));
+            }
+            dist.push_back(make_pair(d,j));
+        }
+        sort(dist.begin(), dist.end(), [](const pair<float,int> &p1, const pair<float,int> &p2){return p1.first > p2.first;});
+        auto it = dist.begin();
+        result.push_back(datos[it->second]);
     }
     return result;
 }

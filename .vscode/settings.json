@@ -82,6 +82,7 @@
         "deque": "cpp",
         "queue": "cpp",
         "stack": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "set": "cpp"
     }
 }
