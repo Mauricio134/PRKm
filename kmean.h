@@ -19,6 +19,6 @@ public:
     int altura = 0;
     KmeanTree();
     KmeanTree(int , int);
-    void Insert(vector<Data *> &);
-    void clusterSelect(KmeanTree * &, vector<Data> conjunto);
+    void Insert(vector<Data *> &, vector<Data *> &, vector<vector<Data *>> &);
+    //void clusterSelect(KmeanTree * &, vector<Data> conjunto);
 };

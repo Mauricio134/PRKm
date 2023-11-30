@@ -9,13 +9,16 @@
 #include <algorithm>
 #include <iterator>
 #include <set>
+#include <numeric>
 
 using namespace std;
 
 #define dimension 32
 #define maxClusters 10
 
-#define mxAltura 3
+#define mxAltura 12
+
+class KmeanTree;
 
 class Point{
 public:
@@ -30,7 +33,8 @@ public:
     float longitud;
     float latitud;
     vector<float> dato;
-    int iterador;
+    int cluster;
+    KmeanTree * similitud;
     Data();
     Data(float, float, vector<float>);
 };

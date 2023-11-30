@@ -2,6 +2,7 @@
 #include "prquadtree.h"
 #include "kmean.h"
 #include "silueta2.cpp"
+#include "silueta3.cpp"
 #include "prquadtree.cpp"
 #include "kmean.cpp"
 
@@ -17,7 +18,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) && contador <= 1000)
+    while (getline(archivo, linea) && contador <= 500)
     {
         stringstream strstr(linea);
         string number;
@@ -50,19 +51,25 @@ int main(){
     }
     float al = max(Mx-mx, My-my);
     auto start = std::chrono::high_resolution_clock::now();
-    int k = silueta2(datos);
+    pair<vector<vector<Data *>>,pair<vector<Data *>, int>> k = silueta3(datos);
+    cout << k.second.second << endl;
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
     std::cout << "Tiempo de ejecucion: " << duration.count() << " microsegundos." << std::endl;
-    cout << k << endl;
-    KmeanTree treek(k,0);
-    treek.Insert(datos);
-    /*Quadtree tree(Point(mx,my), al, 0);
+    KmeanTree treek(k.second.second,0);
+    treek.Insert(datos, k.second.first, k.first);
+    Quadtree tree(Point(mx,my), al, 0);
     for(int i = 0; i < datos.size(); i++){
-        cout << "Insertado punto " <<  i << " : " << datos[i].longitud << " " << datos[i].latitud << endl;
-        tree.Insert(&datos[i]);
-    }*/
+        cout << "Insertado punto " <<  i << " : " << datos[i]->longitud << " " << datos[i]->latitud << endl;
+        tree.Insert(datos[i]);
+    }
+    set<Data *> grupo;
+    Point inicio(-18,20);
+    int anchura = 50;
+    tree.rangeQuery(inicio, anchura, grupo);
+
+    set<Data *> parecidos = tree.Similarity(inicio, anchura, grupo);
     //tree.Union(treek);
     archivo.close();
     return 0;

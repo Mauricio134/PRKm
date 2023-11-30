@@ -1,6 +1,5 @@
 #pragma once
 #include "librerias.h"
-#include "kmean.h"
 
 class Quadtree{
 private:
@@ -11,11 +10,14 @@ private:
     Data * d;
     vector<Data *> conjunto;
     Quadtree * children[4];
-    KmeanTree * similitud;
 public:
     Quadtree();
     Quadtree(const Point &, float &, int );
     void Insert(Data *);
     bool Outside(Data *);
-    void Union(KmeanTree);
+    bool Overlap(const Point &, const float &);
+    void rangeQuery(const Point &, const float &, set<Data *> &);
+    bool Inside(const Point &, const float &, Data * &);
+    set<Data *> Similarity(const Point &, const float & , set<Data *> & );
+    //void Union(KmeanTree);
 };

@@ -65,6 +65,47 @@ void Quadtree::Insert(Data * p){
     conjunto.push_back(p);
 }
 
+bool Quadtree::Overlap(const Point & init, const float & h){
+    int c_dif_x = min(init.x + h, bottomLeft.x + height) - max(init.x, bottomLeft.x);
+    int c_dif_y = min(init.y + h, bottomLeft.y + height) - max(init.y, bottomLeft.y);
+    if(c_dif_x > 0 && c_dif_y > 0) return true;
+    return false;
+}
+
+bool Quadtree::Inside(const Point &init , const float &h, Data * &p){
+    if(p->longitud < init.x || p->longitud > init.x + h || p->latitud < init.y || p->latitud > init.y + h) return false;
+    return true;
+}
+
+void Quadtree::rangeQuery(const Point & init, const float & h, set<Data *> & result){
+    if(!Overlap(init, h)) return;
+
+    if(d != nullptr || nivel >= mxAltura){
+        for(int i = 0; i < conjunto.size(); i++){
+            if(!Inside(init, h, conjunto[i]) || result.count(conjunto[i])) continue;
+            result.insert(conjunto[i]);
+        }
+        return;
+    }
+    for(int i = 0; i < 4; i++){
+        children[i]->rangeQuery(init, h, result);
+    }
+    return;
+}
+
+set<Data *> Quadtree::Similarity(const Point & init, const float & h, set<Data *> & group){
+    set<Data *> resultado;
+    for(auto it = group.begin(); it != group.end(); it++){
+        for(int i = 0; i < (*it)->similitud->clusters.size(); i++){
+            for(int j = 0; j < (*it)->similitud->clusters[i]->Set.size(); j++){
+                if(!Inside(init, h, (*it)->similitud->clusters[i]->Set[j]) || resultado.count((*it)->similitud->clusters[i]->Set[j])) continue;
+                resultado.insert((*it)->similitud->clusters[i]->Set[j]);
+            }
+        }
+    }
+    return resultado;
+}
+
 //Funcion Union
 /*void Quadtree::Union(KmeanTree mean){
     for(int i = 0; i < 4; i++){
