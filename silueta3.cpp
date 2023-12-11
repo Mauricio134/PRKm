@@ -95,16 +95,17 @@ pair<vector<vector<Data *>>,pair<vector<Data *>, int>> silueta3(vector<Data *> &
     float distTo1 = 1e9;
     int K = 0;
     int total = maxClusters;
+    int totalDatos = datos.size();
     vector<Data *> result;
     vector<vector<Data *>> resultSet;
-    if(datos.size() < maxClusters){
-        total = datos.size();
+    if(totalDatos < maxClusters){
+        total = totalDatos;
     }
     for(int k = 2; k <= total; k++){
         vector<Data *> centroides(k);
         vector<vector<Data *>> Sets(k);
         iniCentroides(datos, centroides);
-        for(int data = 0; data < datos.size(); data++){
+        for(int data = 0; data < totalDatos; data++){
             float distanciaMenor = 1e9;
             int group = 0;
             for(int cluster = 0; cluster < k; cluster++){
@@ -120,12 +121,12 @@ pair<vector<vector<Data *>>,pair<vector<Data *>, int>> silueta3(vector<Data *> &
         }
 
         float coeficiente = 0.0f;
-        for(int data = 0; data < datos.size(); data++){
+        for(int data = 0; data < totalDatos; data++){
             float datoA = a(Sets, datos[data]);
             float datoB = b(Sets, datos[data], k);
             coeficiente += (datoB-datoA)/max(datoB, datoA);
         }
-        coeficiente /= (float)datos.size();
+        coeficiente /= (float)totalDatos;
         for(int i = 0; i < Sets.size();i++){
             if(Sets[i].size() == 0){
                 coeficiente = -1;
