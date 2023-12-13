@@ -6,7 +6,7 @@
 #include "prquadtree.cpp"
 #include "kmean.cpp"
 
-#define NOMBRE_ARCHIVO "meteorite.csv"
+#define NOMBRE_ARCHIVO "test_final.csv"
 
 int main(){
     ifstream archivo(NOMBRE_ARCHIVO);
