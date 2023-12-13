@@ -11,14 +11,14 @@
 int main(){
     ifstream archivo(NOMBRE_ARCHIVO);
     string linea;
-    char delimitador = ',';
+    char delimitador = ';';
     vector<Data *> datos;
     float Mx = -1e6;
     float My = -1e6;
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) && contador <= 1000)
+    while (getline(archivo, linea) && contador <= 4000)
     {
         stringstream strstr(linea);
         string number;
