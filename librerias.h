@@ -32,8 +32,9 @@ class Data{
 public:
     float longitud;
     float latitud;
-    vector<float> dato;
     int cluster;
+    int etiqueta = 0;
+    vector<float> dato;
     KmeanTree * similitud;
     Data();
     Data(float, float, vector<float>);

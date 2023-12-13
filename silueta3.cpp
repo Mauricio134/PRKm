@@ -2,6 +2,7 @@
 #include "librerias.h"
 
 map<pair<Data *, Data *>, float> distanciasPuntos;
+vector<vector<float>> distancesPoint(17100, vector<float>(17100, 0.0f));
 map<Data *, pair<vector<float>, int>> actualizarCentroide;
 map<pair<Data *, Data *>, float> centroideApunto;
 
@@ -49,6 +50,21 @@ void nuevoCentroide(Data * & centroide, vector<float> & punto){
     }
     centroide->dato = actualizarCentroide[centroide].first;
 }
+
+/*float distEuToPoint(Data * &punto1, Data * &punto2){
+    if(distancesPoint[punto1->etiqueta][punto2->etiqueta] != 0.0f){
+        return distancesPoint[punto1->etiqueta][punto2->etiqueta];
+    }
+    else if(distancesPoint[punto2->etiqueta][punto1->etiqueta] != 0.0f){
+        return distancesPoint[punto2->etiqueta][punto1->etiqueta];
+    }
+    float resultado = 0.0f;
+    for(int i = 0; i < punto1->dato.size(); i++){
+        resultado += (punto1->dato[i]-punto2->dato[i])*(punto1->dato[i]-punto2->dato[i]);
+    }
+    distancesPoint[punto1->etiqueta][punto2->etiqueta] = resultado;
+    return resultado;
+}*/
 
 float distEuToPoint(Data * &punto1, Data * &punto2){
     auto iterador = distanciasPuntos.find(make_pair(punto1, punto2));

@@ -1,7 +1,6 @@
 #pragma once
 #include "librerias.h"
 #include "kmean.h"
-#include "silueta2.cpp"
 
 map<int, pair<Data *,int>> nueCentroide;
 

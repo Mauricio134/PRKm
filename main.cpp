@@ -1,7 +1,6 @@
 #include "librerias.h"
 #include "prquadtree.h"
 #include "kmean.h"
-#include "silueta2.cpp"
 #include "silueta3.cpp"
 #include "prquadtree.cpp"
 #include "kmean.cpp"
@@ -24,9 +23,8 @@ int main(){
         string number;
         float longitud = 0;
         float latitud = 0;
-        vector<float> d;
         int c = 0;
-        Data nueva;
+        vector<float> d;
         while(getline(strstr,number,delimitador))
         {
             float n;
@@ -47,6 +45,7 @@ int main(){
             c++;
         }
         datos.push_back(new Data(longitud, latitud, d));
+        datos.front()->etiqueta = contador;
         contador++;
     }
     float al = max(Mx-mx, My-my);
