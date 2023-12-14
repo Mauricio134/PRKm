@@ -105,18 +105,3 @@ set<Data *> Quadtree::Similarity(const Point & init, const float & h, set<Data *
     }
     return resultado;
 }
-
-//Funcion Union
-/*void Quadtree::Union(KmeanTree mean){
-    for(int i = 0; i < 4; i++){
-        if(d != nullptr){
-            mean.clusterSelect(similitud, conjunto);
-            return;
-        }
-        else if(nPoints == 0){
-            return;
-        }
-        children[i]->Union(mean);
-    }
-    return;
-}*/

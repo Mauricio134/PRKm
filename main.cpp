@@ -8,6 +8,7 @@
 #define NOMBRE_ARCHIVO "test_final.csv"
 
 int main(){
+    auto start = std::chrono::high_resolution_clock::now();
     ifstream archivo(NOMBRE_ARCHIVO);
     string linea;
     char delimitador = ';';
@@ -17,7 +18,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) /*&& contador <= 8000*/)
+    while (getline(archivo, linea) /*&& contador <= 1000*/)
     {
         stringstream strstr(linea);
         string number;
@@ -49,17 +50,11 @@ int main(){
         contador++;
     }
     float al = max(Mx-mx, My-my);
-    auto start = std::chrono::high_resolution_clock::now();
     pair<vector<vector<Data *>>,pair<vector<Data *>, int>> k = silueta3(datos);
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-
-    std::cout << "Tiempo de ejecucion: " << duration.count() << " microsegundos." << std::endl;
     KmeanTree treek(k.second.second,0);
     treek.Insert(datos, k.second.first, k.first);
     Quadtree tree(Point(mx,my), al, 0);
     for(int i = 0; i < datos.size(); i++){
-        cout << "Insertado punto " <<  i << " : " << datos[i]->longitud << " " << datos[i]->latitud << endl;
         tree.Insert(datos[i]);
     }
     set<Data *> grupo;
@@ -68,7 +63,10 @@ int main(){
     tree.rangeQuery(inicio, anchura, grupo);
 
     set<Data *> parecidos = tree.Similarity(inicio, anchura, grupo);
-    //tree.Union(treek);
     archivo.close();
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+    std::cout << "Tiempo de ejecucion: " << duration.count() << " microsegundos." << std::endl;
     return 0;
 }

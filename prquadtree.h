@@ -19,5 +19,4 @@ public:
     void rangeQuery(const Point &, const float &, set<Data *> &);
     bool Inside(const Point &, const float &, Data * &);
     set<Data *> Similarity(const Point &, const float & , set<Data *> & );
-    //void Union(KmeanTree);
 };
