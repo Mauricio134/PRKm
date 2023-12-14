@@ -17,7 +17,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) && contador <= 4000)
+    while (getline(archivo, linea) /*&& contador <= 8000*/)
     {
         stringstream strstr(linea);
         string number;
@@ -51,7 +51,6 @@ int main(){
     float al = max(Mx-mx, My-my);
     auto start = std::chrono::high_resolution_clock::now();
     pair<vector<vector<Data *>>,pair<vector<Data *>, int>> k = silueta3(datos);
-    cout << k.second.second << endl;
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 

@@ -1,8 +1,7 @@
 #pragma once
 #include "librerias.h"
 
-map<pair<Data *, Data *>, float> distanciasPuntos;
-vector<vector<float>> distancesPoint(17100, vector<float>(17100, 0.0f));
+vector<vector<float>> distancesPoint(17200, vector<float>(17200, 0.0f));
 map<Data *, pair<vector<float>, int>> actualizarCentroide;
 map<pair<Data *, Data *>, float> centroideApunto;
 
@@ -51,7 +50,7 @@ void nuevoCentroide(Data * & centroide, vector<float> & punto){
     centroide->dato = actualizarCentroide[centroide].first;
 }
 
-/*float distEuToPoint(Data * &punto1, Data * &punto2){
+float distEuToPoint(Data * punto1, Data * punto2){
     if(distancesPoint[punto1->etiqueta][punto2->etiqueta] != 0.0f){
         return distancesPoint[punto1->etiqueta][punto2->etiqueta];
     }
@@ -62,46 +61,31 @@ void nuevoCentroide(Data * & centroide, vector<float> & punto){
     for(int i = 0; i < punto1->dato.size(); i++){
         resultado += (punto1->dato[i]-punto2->dato[i])*(punto1->dato[i]-punto2->dato[i]);
     }
-    distancesPoint[punto1->etiqueta][punto2->etiqueta] = resultado;
-    return resultado;
-}*/
-
-float distEuToPoint(Data * &punto1, Data * &punto2){
-    auto iterador = distanciasPuntos.find(make_pair(punto1, punto2));
-    if (iterador != distanciasPuntos.end()){
-        return iterador->second;
-    }
-    iterador = distanciasPuntos.find(make_pair(punto2, punto1));
-    if (iterador != distanciasPuntos.end()){
-        return iterador->second;
-    }
-    float resultado = 0.0f;
-    for(int i = 0; i < punto1->dato.size(); i++){
-        resultado += (punto1->dato[i]-punto2->dato[i])*(punto1->dato[i]-punto2->dato[i]);
-    }
-    distanciasPuntos[make_pair(punto1,punto2)] = sqrt(resultado);
-    return distanciasPuntos[make_pair(punto1,punto2)];
+    distancesPoint[punto1->etiqueta][punto2->etiqueta] = sqrt(resultado);
+    return distancesPoint[punto1->etiqueta][punto2->etiqueta];
 }
 
-float a(vector<vector<Data *>> &Sets, Data * &punto){
+float a(vector<vector<Data *>> &Sets, Data * punto){
     int indice = punto->cluster;
+    int tamanoSet = Sets[indice].size();
     float resultado = 0.0f;
-    for(int i = 0; i < Sets[indice].size(); i++){
+    for(int i = 0; i < tamanoSet; i++){
         resultado += distEuToPoint(punto, Sets[indice][i]);
     }
-    return resultado/(float) Sets[indice].size();
+    return resultado/(float) tamanoSet;
 }
 
 float b(vector<vector<Data *>> &Sets, Data * &punto, int k){
     int noIndice = punto->cluster;
     float valor = 1e9;
-    for(int i = 0; i < Sets.size(); i++){
+    for(int i = 0; i < k; i++){
         if(i == noIndice) continue;
         float resultado = 0.0f;
-        for(int j = 0; j < Sets[i].size(); j++){
+        int tamanoSeti = Sets[i].size();
+        for(int j = 0; j < tamanoSeti; j++){
             resultado += distEuToPoint(punto, Sets[i][j]);
         }
-        resultado /= (float) Sets[i].size();
+        resultado /= (float) tamanoSeti;
         valor = min(valor, resultado);
     }
     return valor;
