@@ -2,8 +2,6 @@
 #include "librerias.h"
 #include "prquadtree.h"
 
-// Constructor de Clase Data sin argumentos.
-
 // Constructor del Quadtree sin argumentos.
 Quadtree::Quadtree(){
     d = nullptr;
@@ -65,43 +63,46 @@ void Quadtree::Insert(Data * p){
     conjunto.push_back(p);
 }
 
-bool Quadtree::Overlap(const Point & init, const float & h){
-    int c_dif_x = min(init.x + h, bottomLeft.x + height) - max(init.x, bottomLeft.x);
-    int c_dif_y = min(init.y + h, bottomLeft.y + height) - max(init.y, bottomLeft.y);
+bool Quadtree::Overlap(float ax, float ay, float bx, float by){
+    int c_dif_x = min(bx, bottomLeft.x + height) - max(ax, bottomLeft.x);
+    int c_dif_y = min(by, bottomLeft.y + height) - max(ay, bottomLeft.y);
     if(c_dif_x > 0 && c_dif_y > 0) return true;
     return false;
 }
 
-bool Quadtree::Inside(const Point &init , const float &h, Data * &p){
-    if(p->longitud < init.x || p->longitud > init.x + h || p->latitud < init.y || p->latitud > init.y + h) return false;
+bool Quadtree::Inside(float ax, float ay, float bx, float by, Data * &p){
+    if(p->longitud < ax || p->longitud > bx || p->latitud < ay || p->latitud > by) return false;
     return true;
 }
 
-void Quadtree::rangeQuery(const Point & init, const float & h, set<Data *> & result){
-    if(!Overlap(init, h)) return;
+void Quadtree::rangeQuery(float ax, float ay, float bx, float by, set<Data *> & result){
+    if(!Overlap(ax, ay, bx, by)) return;
 
     if(d != nullptr || nivel >= mxAltura){
         for(int i = 0; i < conjunto.size(); i++){
-            if(!Inside(init, h, conjunto[i]) || result.count(conjunto[i])) continue;
+            if(!Inside(ax, ay, bx, by, conjunto[i]) || result.count(conjunto[i])) continue;
             result.insert(conjunto[i]);
         }
         return;
     }
     for(int i = 0; i < 4; i++){
-        children[i]->rangeQuery(init, h, result);
+        children[i]->rangeQuery(ax, ay, bx, by, result);
     }
     return;
 }
 
-set<Data *> Quadtree::Similarity(const Point & init, const float & h, set<Data *> & group){
-    set<Data *> resultado;
+vector<Cluster *> Quadtree::Similarity(float ax, float ay, float bx, float by, set<Data *> & group){
+    set<Cluster *> simil;
+    vector<Cluster *> resultado;
     for(auto it = group.begin(); it != group.end(); it++){
-        for(int i = 0; i < (*it)->similitud->clusters.size(); i++){
-            for(int j = 0; j < (*it)->similitud->clusters[i]->Set.size(); j++){
-                if(!Inside(init, h, (*it)->similitud->clusters[i]->Set[j]) || resultado.count((*it)->similitud->clusters[i]->Set[j])) continue;
-                resultado.insert((*it)->similitud->clusters[i]->Set[j]);
-            }
+        if(simil.count((*it)->similitud)) continue;
+        simil.insert((*it)->similitud);
+        Cluster * grupoNuevo = new Cluster();
+        for(int j = 0; j < (*it)->similitud->Set.size(); j++){
+            if(!Inside(ax, ay, bx, by, (*it)->similitud->Set[j])) continue;
+            grupoNuevo->Set.push_back((*it)->similitud->Set[j]);
         }
+        resultado.push_back(grupoNuevo);
     }
     return resultado;
 }

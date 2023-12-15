@@ -51,7 +51,7 @@ void KmeanTree::Insert(vector<Data *> & datos, vector<Data *> & centroides, vect
 
     for(int i = 0; i < setcomplete.size(); i++){
         for(int j = 0; j < setcomplete[i].size(); j++){
-            setcomplete[i][j]->similitud = this;
+            setcomplete[i][j]->similitud = this->clusters[i];
             clusters[i]->Set.push_back(setcomplete[i][j]);
         }
     }

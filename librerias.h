@@ -18,7 +18,7 @@ using namespace std;
 
 #define mxAltura 12
 
-class KmeanTree;
+class Cluster;
 
 class Point{
 public:
@@ -35,7 +35,7 @@ public:
     int cluster;
     int etiqueta = 0;
     vector<float> dato;
-    KmeanTree * similitud;
+    Cluster * similitud;
     Data();
     Data(float, float, vector<float>);
 };

@@ -18,7 +18,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) /*&& contador <= 1000*/)
+    while (getline(archivo, linea) /*&& contador <= 4000*/)
     {
         stringstream strstr(linea);
         string number;
@@ -58,11 +58,13 @@ int main(){
         tree.Insert(datos[i]);
     }
     set<Data *> grupo;
-    Point inicio(-18,20);
-    int anchura = 50;
-    tree.rangeQuery(inicio, anchura, grupo);
+    float menorX = 18.0f;
+    float mayorX = 197.0f;
+    float menorY = 20.0f;
+    float mayorY = 45.0f;
+    tree.rangeQuery(menorX, menorY, mayorX, mayorY, grupo);
 
-    set<Data *> parecidos = tree.Similarity(inicio, anchura, grupo);
+    vector<Cluster *> parecidos = tree.Similarity(menorX, menorY, mayorX, mayorY, grupo);
     archivo.close();
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);

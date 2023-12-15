@@ -15,8 +15,8 @@ public:
     Quadtree(const Point &, float &, int );
     void Insert(Data *);
     bool Outside(Data *);
-    bool Overlap(const Point &, const float &);
-    void rangeQuery(const Point &, const float &, set<Data *> &);
-    bool Inside(const Point &, const float &, Data * &);
-    set<Data *> Similarity(const Point &, const float & , set<Data *> & );
+    bool Overlap(float , float, float, float);
+    void rangeQuery(float , float, float, float, set<Data *> &);
+    bool Inside(float , float, float, float, Data * &);
+    vector<Cluster *> Similarity(float , float, float, float , set<Data *> & );
 };
