@@ -5,14 +5,6 @@ vector<vector<float>> distancesPoint(17200, vector<float>(17200, 0.0f));
 map<Data *, pair<vector<float>, int>> actualizarCentroide;
 map<pair<Data *, Data *>, float> centroideApunto;
 
-void iniCentroides(vector<Data *> &datos, vector<Data *> & centroides){
-    srand(time(NULL));
-    for(int i = 0; i < centroides.size(); i++){
-        int numRandom = rand() % datos.size();
-        centroides[i] = new Data(datos[numRandom]->longitud, datos[numRandom]->latitud, datos[numRandom]->dato);
-    }
-}
-
 float distEuToCentroide(Data * &punto1, Data * &punto2){
     auto iterador = centroideApunto.find(make_pair(punto1, punto2));
     if (iterador != centroideApunto.end()){
@@ -28,6 +20,36 @@ float distEuToCentroide(Data * &punto1, Data * &punto2){
     }
     centroideApunto[make_pair(punto1,punto2)] = sqrt(resultado);
     return centroideApunto[make_pair(punto1,punto2)];
+}
+
+void iniCentroides(vector<Data *> &datos, vector<Data *> & centroides){
+    srand(time(NULL));
+    int numRandom = rand() % datos.size();
+    centroides[0] = new Data(datos[numRandom]->longitud, datos[numRandom]->latitud, datos[numRandom]->dato);
+    for(int i = 1; i < centroides.size(); i++){
+        vector<float> distCuadratica(datos.size(), 1e9f);
+        for (int j = 0; j < datos.size(); ++j) {
+            for (int c = 0; c < i; ++c) {
+                float distancia = distEuToCentroide(datos[j], centroides[c]);
+                distCuadratica[j] = min(distCuadratica[j], distancia);
+            }
+        }
+        float totalDistSquared = 0.0f;
+        for (float distSquared : distCuadratica) {
+            totalDistSquared += distSquared;
+        }
+
+        // Choose the next centroid with probability proportional to the distance squared
+        float randomValue = (float)rand() / RAND_MAX;
+        float cumulativeProbability = 0.0f;
+        for (int j = 0; j < datos.size(); ++j) {
+            cumulativeProbability += distCuadratica[j] / totalDistSquared;
+            if (randomValue <= cumulativeProbability) {
+                centroides[i] = new Data(datos[j]->longitud, datos[j]->latitud, datos[j]->dato);
+                break;
+            }
+        }
+    }
 }
 
 void nuevoCentroide(Data * & centroide, vector<float> & punto){
@@ -131,11 +153,13 @@ pair<vector<vector<Data *>>,pair<vector<Data *>, int>> silueta3(vector<Data *> &
         coeficiente /= (float)totalDatos;
 
         for(int i = 0; i < Sets.size();i++){
+            cout << "Cluster " << i+1 << Sets[i].size() << endl;
             if(Sets[i].size() == 0){
                 coeficiente = -1;
-                break;
+                //break;
             }
         }
+        cout << "coef: " << coeficiente << endl;
         float distRef = abs(1.0f-coeficiente);
         if(distRef < distTo1 && coeficiente != -1){
             distTo1 = distRef;
@@ -143,6 +167,7 @@ pair<vector<vector<Data *>>,pair<vector<Data *>, int>> silueta3(vector<Data *> &
             result = centroides;
             resultSet = Sets;
         }
+        cout << "K: " << K << endl;
     }
     return make_pair(resultSet, make_pair(result, K));
 }
