@@ -153,13 +153,11 @@ pair<vector<vector<Data *>>,pair<vector<Data *>, int>> silueta3(vector<Data *> &
         coeficiente /= (float)totalDatos;
 
         for(int i = 0; i < Sets.size();i++){
-            cout << "Cluster " << i+1 << " "<< Sets[i].size() << endl;
             if(Sets[i].size() == 0){
                 coeficiente = -1;
-                //break;
+                break;
             }
         }
-        cout << k <<" : " << coeficiente << endl;
         float distRef = abs(1.0f-coeficiente);
         if(distRef < distTo1 && coeficiente != -1){
             distTo1 = distRef;
@@ -168,6 +166,5 @@ pair<vector<vector<Data *>>,pair<vector<Data *>, int>> silueta3(vector<Data *> &
             resultSet = Sets;
         }
     }
-    cout << "K: " << K << endl;
     return make_pair(resultSet, make_pair(result, K));
 }

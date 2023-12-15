@@ -58,14 +58,22 @@ int main(){
     }
     set<Data *> grupo;
     float menorX = 18.0f;
-    float mayorX = 518.0f;
+    float mayorX = 197.0f;
     float menorY = 20.0f;
     float mayorY = 45.0f;
     tree.rangeQuery(menorX, menorY, mayorX, mayorY, grupo);
 
     vector<Cluster *> parecidos = tree.Similarity(menorX, menorY, mayorX, mayorY, grupo);
     for(int i = 0; i < parecidos.size(); i++){
-        cout << "Cluster " << i+1 << ": " << parecidos[i]->Set.size() << endl;
+        cout << "Cluster " << i+1 << ": " << endl;
+        cout << "Size: " << parecidos[i]->Set.size() << endl;
+        cout << "---------------------" << endl;
+        for(int j = 0; j < parecidos[i]->Set.size(); j++){
+            cout << "Longitud: " << parecidos[i]->Set[j]->longitud << endl;
+            cout << "Latitud: " << parecidos[i]->Set[j]->latitud << endl;
+            cout << endl;
+        }
+        cout << endl;
     }
     archivo.close();
     return 0;
