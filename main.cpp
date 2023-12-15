@@ -25,7 +25,7 @@ int main(){
         float latitud = 0;
         int c = 0;
         vector<float> d;
-        while(getline(strstr,number,delimitador))
+        while(getline(strstr,number,delimitador) && contador < 3000)
         {
             float n;
             istringstream(number) >> n;
@@ -65,7 +65,16 @@ int main(){
 
     vector<Cluster *> parecidos = tree.Similarity(menorX, menorY, mayorX, mayorY, grupo);
     for(int i = 0; i < parecidos.size(); i++){
-        cout << "Cluster " << i+1 << ": " << parecidos[i]->Set.size() << endl;
+        cout << "Cluster " << i+1 << ": " << endl;
+        cout << "Size: " << parecidos[i]->Set.size() << endl;
+        cout << "Best-Level: " << parecidos[i]->H << endl;
+        cout << "---------------------" << endl;
+        for(int j = 0; j < parecidos[i]->Set.size(); j++){
+            cout << "Longitud: " << parecidos[i]->Set[j]->longitud << endl;
+            cout << "Latitud: " << parecidos[i]->Set[j]->latitud << endl;
+            cout << endl;
+        }
+        cout << endl;
     }
     archivo.close();
     return 0;

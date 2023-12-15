@@ -47,6 +47,7 @@ void KmeanTree::Insert(vector<Data *> & datos, vector<Data *> & centroides, vect
 
     for(int i = 0; i < divisiones; i++){
         clusters[i]->valor = centroides[i];
+        clusters[i]->H = altura;
     }
 
     for(int i = 0; i < setcomplete.size(); i++){
