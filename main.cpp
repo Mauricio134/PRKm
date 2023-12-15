@@ -8,7 +8,6 @@
 #define NOMBRE_ARCHIVO "test_final.csv"
 
 int main(){
-    auto start = std::chrono::high_resolution_clock::now();
     ifstream archivo(NOMBRE_ARCHIVO);
     string linea;
     char delimitador = ';';
@@ -18,7 +17,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) /*&& contador <= 4000*/)
+    while (getline(archivo, linea))
     {
         stringstream strstr(linea);
         string number;
@@ -66,9 +65,5 @@ int main(){
 
     vector<Cluster *> parecidos = tree.Similarity(menorX, menorY, mayorX, mayorY, grupo);
     archivo.close();
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-
-    std::cout << "Tiempo de ejecucion: " << duration.count() << " microsegundos." << std::endl;
     return 0;
 }

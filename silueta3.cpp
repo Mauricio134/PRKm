@@ -144,6 +144,5 @@ pair<vector<vector<Data *>>,pair<vector<Data *>, int>> silueta3(vector<Data *> &
             resultSet = Sets;
         }
     }
-    cout <<"k: " << K << endl;
     return make_pair(resultSet, make_pair(result, K));
 }
