@@ -17,7 +17,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea))
+    while (getline(archivo, linea) && contador < 3000)
     {
         stringstream strstr(linea);
         string number;
@@ -25,7 +25,7 @@ int main(){
         float latitud = 0;
         int c = 0;
         vector<float> d;
-        while(getline(strstr,number,delimitador) && contador < 3000)
+        while(getline(strstr,number,delimitador))
         {
             float n;
             istringstream(number) >> n;
