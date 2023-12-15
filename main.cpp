@@ -64,6 +64,9 @@ int main(){
     tree.rangeQuery(menorX, menorY, mayorX, mayorY, grupo);
 
     vector<Cluster *> parecidos = tree.Similarity(menorX, menorY, mayorX, mayorY, grupo);
+    for(int i = 0; i < parecidos.size(); i++){
+        cout << "Cluster " << i+1 << ": " << parecidos[i]->Set.size() << endl;
+    }
     archivo.close();
     return 0;
 }
