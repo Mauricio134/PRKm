@@ -17,7 +17,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) && contador < 3000)
+    while (getline(archivo, linea))
     {
         stringstream strstr(linea);
         string number;

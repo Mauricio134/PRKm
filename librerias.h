@@ -16,7 +16,7 @@ using namespace std;
 #define dimension 32
 #define maxClusters 10
 
-#define mxAltura 12
+#define mxAltura 11
 
 class Cluster;
 
