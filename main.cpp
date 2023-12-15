@@ -17,7 +17,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea))
+    while (getline(archivo, linea) && contador < 3000)
     {
         stringstream strstr(linea);
         string number;
@@ -58,12 +58,15 @@ int main(){
     }
     set<Data *> grupo;
     float menorX = 18.0f;
-    float mayorX = 197.0f;
+    float mayorX = 518.0f;
     float menorY = 20.0f;
     float mayorY = 45.0f;
     tree.rangeQuery(menorX, menorY, mayorX, mayorY, grupo);
 
     vector<Cluster *> parecidos = tree.Similarity(menorX, menorY, mayorX, mayorY, grupo);
+    for(int i = 0; i < parecidos.size(); i++){
+        cout << "Cluster " << i+1 << ": " << parecidos[i]->Set.size() << endl;
+    }
     archivo.close();
     return 0;
 }
