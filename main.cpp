@@ -17,7 +17,7 @@ int main(){
     float mx = 1e6;
     float my = 1e6;
     int contador = 0;
-    while (getline(archivo, linea) /*&& contador < 5000*/)
+    while (getline(archivo, linea) && contador < 5000)
     {
         stringstream strstr(linea);
         string number;
@@ -67,6 +67,7 @@ int main(){
     for(int i = 0; i < parecidos.size(); i++){
         cout << "Cluster " << i+1 << ": " << endl;
         cout << "Size: " << parecidos[i]->Set.size() << endl;
+        cout << "Best-Level: " << parecidos[i]->H << endl;
         cout << "---------------------" << endl;
         for(int j = 0; j < parecidos[i]->Set.size(); j++){
             cout << "Longitud: " << parecidos[i]->Set[j]->longitud << endl;

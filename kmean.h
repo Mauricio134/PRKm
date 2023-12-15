@@ -9,6 +9,7 @@ public:
     vector<Data *> Set;
     Data * valor;
     KmeanTree * next;
+    int H = 0;
     Cluster();
 };
 

@@ -102,6 +102,7 @@ vector<Cluster *> Quadtree::Similarity(float ax, float ay, float bx, float by, s
             if(!Inside(ax, ay, bx, by, (*it)->similitud->Set[j])) continue;
             grupoNuevo->Set.push_back((*it)->similitud->Set[j]);
         }
+        grupoNuevo->H = (*it)->similitud->H;
         resultado.push_back(grupoNuevo);
     }
     return resultado;
