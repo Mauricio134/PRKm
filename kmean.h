@@ -11,6 +11,7 @@ public:
     KmeanTree * next;
     int H = 0;
     Cluster();
+    ~Cluster();
 };
 
 class KmeanTree{
@@ -21,4 +22,5 @@ public:
     KmeanTree();
     KmeanTree(int , int);
     void Insert(vector<Data *> &, vector<Data *> &, vector<vector<Data *>> &);
+    ~KmeanTree();
 };

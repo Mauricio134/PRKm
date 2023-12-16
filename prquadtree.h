@@ -13,6 +13,7 @@ private:
 public:
     Quadtree();
     Quadtree(const Point &, float &, int );
+    ~Quadtree();
     void Insert(Data *);
     bool Outside(Data *);
     bool Overlap(float , float, float, float);

@@ -17,6 +17,10 @@ Quadtree::Quadtree( const Point &nuevo , float &h, int n){
     for(int i = 0; i < 4; i++) children[i] = new Quadtree();
 }
 
+Quadtree::~Quadtree(){
+    for(int i = 0; i < 4; i++) delete children[i];
+}
+
 // Funcion de Outside, para verificar si el punto no se sale del cuadrante.
 bool Quadtree::Outside(Data * p){
     return p->longitud < bottomLeft.x || p->longitud > bottomLeft.x + height || p->latitud < bottomLeft.y || p->latitud > bottomLeft.y + height;

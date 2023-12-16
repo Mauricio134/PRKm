@@ -31,8 +31,23 @@ Cluster::Cluster(){
     next = new KmeanTree();
 }
 
+Cluster::~Cluster(){
+    for (Data *data : Set) {
+        delete data;
+    }
+    delete valor;
+    delete next;
+
+}
+
 KmeanTree::KmeanTree(){
     clusters.resize(divisiones);
+}
+
+KmeanTree::~KmeanTree(){
+    for (Cluster *cluster : clusters) {
+        delete cluster;
+    }
 }
 
 KmeanTree::KmeanTree(int k, int nuevah){

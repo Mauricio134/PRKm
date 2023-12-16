@@ -28,6 +28,7 @@ public:
     float y;
     Point() : x(0.00), y(0.00){};
     Point(float x_, float y_) : x(x_), y(y_){};
+    ~Point(){}
 };
 
 class Data{
@@ -40,6 +41,7 @@ public:
     Cluster * similitud;
     Data();
     Data(float, float, vector<float>);
+    ~Data();
 };
 
 Data::Data(){
@@ -54,3 +56,5 @@ Data::Data(float lon, float lat, vector<float> a){
     longitud = lon;
     dato = a;
 }
+
+Data::~Data(){}
